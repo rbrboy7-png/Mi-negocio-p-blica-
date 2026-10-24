@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Negocio Publica</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f3f4f6;color:#222;margin:0;padding:18px}
+main{max-width:600px;margin:auto}
+h1{color:#5636a5;text-align:center}
+section{background:white;padding:18px;border-radius:14px;margin:15px 0}
+label{display:block;font-weight:bold;margin:12px 0 6px}
+input,textarea,button{box-sizing:border-box;width:100%;padding:12px;border-radius:8px;font-size:16px}
+input,textarea{border:1px solid #ccc}
+button{background:#5636a5;color:white;border:0;margin-top:12px;font-weight:bold}
+button:disabled{opacity:.5}
+img{width:100%;border-radius:10px;margin-top:12px}
+#estado{white-space:pre-wrap}
+</style>
+</head>
+<body>
+<main>
+<h1>Mi Negocio Publica</h1>
+<p style="text-align:center">Crea imágenes para tu negocio desde el móvil.</p>
+
+<section>
+<h2>Crear imagen con IA</h2>
+<label for="idea">¿Qué imagen quieres crear?</label>
+<textarea id="idea" rows="4" placeholder="Ejemplo: cartel elegante para una cafetería anunciando desayunos, con café y cruasanes"></textarea>
+<button id="crear">Generar imagen</button>
+<p id="estado">Escribe una descripción para empezar.</p>
+<img id="resultado" alt="Imagen generada" hidden>
+<button id="descargar" hidden>Descargar imagen</button>
+</section>
+
+<section>
+<h2>Usar una foto del móvil
