@@ -1,15 +1,18 @@
 import express from "express";
 import OpenAI from "openai";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(express.json({ limit: "15mb" }));
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const apiKey = process.env.OPENAI_API_KEY;
 const client = apiKey ? new OpenAI({ apiKey }) : null;
 
-app.get("/", (_req, res) => {
-  res.type("text").send("Mi Negocio Publica: servidor activo.");
-});
+app.use(express.static(__dirname));
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true, aiConfigured: Boolean(client) });
@@ -50,7 +53,6 @@ app.post("/api/image", async (req, res) => {
     res.json({ image: `data:image/png;base64,${imageData}` });
   } catch (error) {
     console.error("Error al generar la imagen:", error.message);
-
     res.status(500).json({
       error: "No se pudo generar la imagen. Comprueba el saldo y la configuración de la API."
     });
