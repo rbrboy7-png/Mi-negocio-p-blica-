@@ -4,34 +4,235 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mi Negocio Publica</title>
+
 <style>
-body{font-family:Arial,sans-serif;background:#f3f4f6;color:#222;margin:0;padding:18px}
-main{max-width:600px;margin:auto}
-h1{color:#5636a5;text-align:center}
-section{background:white;padding:18px;border-radius:14px;margin:15px 0}
-label{display:block;font-weight:bold;margin:12px 0 6px}
-input,textarea,button{box-sizing:border-box;width:100%;padding:12px;border-radius:8px;font-size:16px}
-input,textarea{border:1px solid #ccc}
-button{background:#5636a5;color:white;border:0;margin-top:12px;font-weight:bold}
-button:disabled{opacity:.5}
-img{width:100%;border-radius:10px;margin-top:12px}
-#estado{white-space:pre-wrap}
+* { box-sizing: border-box; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  color: #222;
+  margin: 0;
+  padding: 18px;
+}
+
+main {
+  max-width: 600px;
+  margin: auto;
+}
+
+h1 {
+  color: #5636a5;
+  text-align: center;
+}
+
+section {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  margin: 15px 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin: 12px 0 6px;
+}
+
+textarea, input, button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+textarea, input {
+  border: 1px solid #ccc;
+}
+
+button {
+  background: #5636a5;
+  color: white;
+  border: 0;
+  margin-top: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+
+#estado {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.nota {
+  color: #666;
+  font-size: 14px;
+}
 </style>
 </head>
+
 <body>
 <main>
+
 <h1>Mi Negocio Publica</h1>
-<p style="text-align:center">Crea imágenes para tu negocio desde el móvil.</p>
+<p style="text-align:center">
+Crea imágenes para tu negocio desde el móvil.
+</p>
 
 <section>
 <h2>Crear imagen con IA</h2>
+
 <label for="idea">¿Qué imagen quieres crear?</label>
-<textarea id="idea" rows="4" placeholder="Ejemplo: cartel elegante para una cafetería anunciando desayunos, con café y cruasanes"></textarea>
-<button id="crear">Generar imagen</button>
-<p id="estado">Escribe una descripción para empezar.</p>
+
+<textarea id="idea" rows="4"
+placeholder="Ejemplo: cartel elegante para una cafetería anunciando desayunos, con café y cruasanes"></textarea>
+
+<button id="crear" type="button">Generar imagen</button>
+
+<p id="estado" role="status" aria-live="polite">
+Escribe una descripción para empezar.
+</p>
+
 <img id="resultado" alt="Imagen generada" hidden>
-<button id="descargar" hidden>Descargar imagen</button>
+
+<button id="descargar" type="button" hidden>
+Descargar imagen
+</button>
 </section>
 
 <section>
-<h2>Usar una foto del móvil
+<h2>Usar una foto del móvil</h2>
+
+<p>Selecciona una imagen de tu galería para verla aquí.</p>
+
+<label for="foto">Elegir foto</label>
+<input id="foto" type="file" accept="image/*">
+
+<img id="vistaFoto" alt="Vista previa de tu foto" hidden>
+
+<p class="nota">
+La foto se muestra en pantalla. La edición con IA de fotos propias
+aún necesita una función adicional en el servidor.
+</p>
+</section>
+
+</main>
+
+<script>
+const botonCrear = document.getElementById("crear");
+const campoIdea = document.getElementById("idea");
+const estado = document.getElementById("estado");
+const resultado = document.getElementById("resultado");
+const botonDescargar = document.getElementById("descargar");
+const campoFoto = document.getElementById("foto");
+const vistaFoto = document.getElementById("vistaFoto");
+
+let imagenGenerada = "";
+
+botonCrear.addEventListener("click", async function () {
+  const prompt = campoIdea.value.trim();
+
+  if (!prompt) {
+    estado.textContent = "Escribe primero qué imagen quieres crear.";
+    campoIdea.focus();
+    return;
+  }
+
+  botonCrear.disabled = true;
+  botonCrear.textContent = "Generando imagen...";
+  estado.textContent = "Conectando con la inteligencia artificial...";
+  resultado.hidden = true;
+  botonDescargar.hidden = true;
+
+  try {
+    const respuesta = await fetch("/api/image", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ prompt: prompt })
+    });
+
+    const datos = await respuesta.json();
+
+    if (!respuesta.ok) {
+      throw new Error(
+        datos.error || "No se ha podido generar la imagen."
+      );
+    }
+
+    if (!datos.image) {
+      throw new Error("El servidor no ha devuelto ninguna imagen.");
+    }
+
+    imagenGenerada = datos.image;
+    resultado.src = imagenGenerada;
+    resultado.hidden = false;
+    botonDescargar.hidden = false;
+    estado.textContent = "¡Imagen generada correctamente!";
+
+  } catch (error) {
+    estado.textContent =
+      "No se ha podido generar la imagen.\n" +
+      (error.message || "Comprueba la conexión e inténtalo de nuevo.");
+  } finally {
+    botonCrear.disabled = false;
+    botonCrear.textContent = "Generar imagen";
+  }
+});
+
+botonDescargar.addEventListener("click", function () {
+  if (!imagenGenerada) return;
+
+  const enlace = document.createElement("a");
+  enlace.href = imagenGenerada;
+  enlace.download = "mi-negocio-publica.png";
+  document.body.appendChild(enlace);
+  enlace.click();
+  enlace.remove();
+});
+
+campoFoto.addEventListener("change", function () {
+  const archivo = campoFoto.files && campoFoto.files[0];
+
+  if (!archivo) {
+    vistaFoto.hidden = true;
+    return;
+  }
+
+  if (!archivo.type.startsWith("image/")) {
+    estado.textContent = "Selecciona un archivo de imagen válido.";
+    campoFoto.value = "";
+    vistaFoto.hidden = true;
+    return;
+  }
+
+  const lector = new FileReader();
+
+  lector.onload = function () {
+    vistaFoto.src = lector.result;
+    vistaFoto.hidden = false;
+  };
+
+  lector.onerror = function () {
+    estado.textContent = "No se ha podido abrir esa foto.";
+  };
+
+  lector.readAsDataURL(archivo);
+});
+</script>
+
+</body>
+</html>
