@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Negocio Publica</title>
+<style>
+:root{--ink:#20203a;--muted:#686879;--purple:#6b4eff;--yellow:#ffd75e;--paper:#fffdf8;--line:#e9e6f2;--blue:#dff3ff}
+*{box-sizing:border-box}body{margin:0;background:#f5f3fb;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.app{max-width:760px;margin:auto;min-height:100vh;background:var(--paper);box-shadow:0 0 35px #25204a12}
+header{padding:22px 18px 16px;background:linear-gradient(135deg,#fff0ad,#ffe8a0);border-radius:0 0 26px 26px}
+.brand{font-weight:900;font-size:25px;letter-spacing:-.8px}.brand span{color:var(--purple)}.tag{font-size:13px;color:#57536b;margin-top:4px}
+main{padding:18px}.step{display:none}.step.active{display:block}.eyebrow{color:var(--purple);font-weight:800;text-transform:uppercase;letter-spacing:1px;font-size:11px}
+h1{font-size:26px;line-height:1.12;letter-spacing:-.7px;margin:8px 0}p{color:var(--muted);line-height:1.5;margin:8px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.choice,.template{border:1px solid var(--line);border-radius:18px;padding:14px;background:white;text-align:left;cursor:pointer;color:var(--ink);font:inherit;transition:.15s}.choice:active,.template:active{transform:scale(.98)}.choice .emoji{font-size:34px;display:block;margin-bottom:8px}.choice strong{display:block;font-size:15px}.choice small{color:var(--muted)}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}.btn{border:0;border-radius:13px;padding:13px 17px;font-weight:800;font-size:14px;cursor:pointer}.primary{background:var(--purple);color:white}.secondary{background:#efecff;color:#4b35c7}.ghost{background:white;border:1px solid var(--line);color:var(--ink)}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}.back{border:1px solid #dcd5ff;background:#f0edff;color:#4b35c7;font-weight:850;font-size:17px;padding:12px 16px;min-height:48px;border-radius:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;flex-shrink:0}.back:focus-visible{outline:3px solid #6b4eff;outline-offset:3px}
+.template{padding:8px;overflow:hidden}.art{aspect-ratio:4/5;border-radius:12px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;min-height:160px;white-space:pre-line}.art .mini{font-size:10px;font-weight:900;letter-spacing:1.5px}.art .headline{font-size:clamp(18px,5vw,27px);line-height:1.02;font-weight:950;letter-spacing:-.7px}.art .foot{font-size:12px;font-weight:750}.template label{display:block;font-weight:800;font-size:13px;padding:9px 3px 2px}.template small{color:var(--muted);padding-left:3px}
+label.field{display:block;font-size:13px;font-weight:800;margin:13px 0 6px}input,textarea,select{width:100%;padding:12px;border:1px solid #dcd7ed;border-radius:12px;font:inherit;background:white;color:var(--ink)}textarea{min-height:84px;resize:vertical}
+.preview{max-width:330px;margin:10px auto;border-radius:18px;overflow:hidden;box-shadow:0 8px 24px #21144b18}.preview .art{aspect-ratio:4/5;padding:0;position:relative;display:block;overflow:hidden}.preview .draggable-text{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:94%;width:max-content;text-align:center;white-space:pre-wrap;overflow-wrap:anywhere;touch-action:none;cursor:move;padding:2px;background:transparent!important;border:0;user-select:none;-webkit-user-select:none}.preview .mini{left:50%;top:10%;font-size:16px;letter-spacing:1px}.preview .headline{left:50%;top:43%;font-size:36px;line-height:1.05}.preview .foot{left:50%;top:82%;font-size:18px}.preview #pvContact{top:91%;font-size:15px}
+.notice{padding:12px 14px;background:#f0edff;border-radius:12px;color:#51448b;font-size:13px;line-height:1.45;margin-top:14px}.badge{display:inline-block;background:#fff1b8;border-radius:99px;padding:6px 10px;font-size:11px;font-weight:900}
+footer{padding:15px 18px 24px;text-align:center;color:#8b8799;font-size:11px}
+
+
+.uploaded-preview{position:relative;max-width:420px;margin:12px auto;border-radius:16px;overflow:hidden;background:#eee}
+.uploaded-preview img{display:block;width:100%;max-height:460px;object-fit:contain;filter:none}
+.uploaded-overlay{position:absolute;left:50%;top:78%;transform:translate(-50%,-50%);width:90%;padding:10px 12px;text-align:center;color:#ffffff;font-size:clamp(20px,5vw,32px);font-weight:950;text-shadow:0 2px 8px #000;background:#00000038;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;touch-action:none;cursor:move;user-select:none;-webkit-user-select:none;border:0}
+.posterPhoto{height:230px;position:relative;display:flex;align-items:center;justify-content:center;gap:8px;overflow:hidden;background:radial-gradient(ellipse at 50% 80%,#c78b54 0,#a76736 38%,#533521 100%);color:#fff}
+.posterPhoto:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#ffffff28,transparent 42%,#00000030)}
+.photoCup,.photoFood{position:relative;filter:drop-shadow(0 9px 7px #24160b66);font-size:94px}
+.photoFood{font-size:76px;transform:rotate(-8deg)}
+.photoCaption{position:absolute;bottom:9px;right:10px;font-size:8px;letter-spacing:1px;background:#21180f99;padding:5px 7px;border-radius:5px}
+.posterCopy{padding:20px 22px 24px;background:#fff8e9;color:#292235;text-align:center}
+.posterBusiness{font-size:11px;letter-spacing:2px;font-weight:900;text-transform:uppercase;margin-bottom:10px}
+.posterOffer{font-size:25px;line-height:1.08;font-weight:950;letter-spacing:-.5px}
+.posterPrice{display:inline-block;margin-top:13px;padding:9px 13px;border-radius:9px;background:#6b4eff;color:#fff;font-size:15px;font-weight:900}
+#aiPoster.mood-fresh .posterPhoto{background:radial-gradient(ellipse at 50% 80%,#f1d9a0 0,#8eaf85 45%,#416b58 100%)}
+#aiPoster.mood-premium .posterPhoto{background:radial-gradient(ellipse at 50% 80%,#c7a46d 0,#4d4034 45%,#17161c 100%)}
+#aiPoster.mood-bold .posterPhoto{background:radial-gradient(ellipse at 50% 80%,#ffb84d 0,#df6548 45%,#752b54 100%)}
+#aiPoster.mood-fresh .posterPrice{background:#317a5a}
+#aiPoster.mood-premium .posterCopy{background:#25233d;color:#fff}
+#aiPoster.mood-premium .posterPrice{background:#c7a46d;color:#25233d}
+#aiPoster.mood-bold .posterCopy{background:#fff0ce}
+#aiPoster.mood-bold .posterPrice{background:#d84b35}
+
+@media(min-width:560px){main{padding:26px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}h1{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand">Mi Negocio <span>Publica</span> ✨</div><div class="tag">Diseños para tu negocio, sin complicaciones.</div></header>
+<main>
+<section class="step active" id="home">
+<span class="eyebrow">Tu escaparate digital</span><h1>Hoy toca hacer que tu negocio destaque.</h1><p>Elige tu tipo de negocio y prepara una publicación para redes sociales en unos pocos pasos.</p>
+<div class="grid">
+<button class="choice business-choice" data-business="Cafetería" data-emoji="☕" type="button"><span class="emoji">☕</span><strong>Cafetería</strong><small>Desayunos, ofertas y café</small></button>
+<button class="choice business-choice" data-business="Restaurante" data-emoji="🍽️" type="button"><span class="emoji">🍽️</span><strong>Restaurante</strong><small>Menús, platos y promociones</small></button>
+<button class="choice business-choice" data-business="Peluquería" data-emoji="✂️" type="button"><span class="emoji">✂️</span><strong>Peluquería</strong><small>Servicios, citas y ofertas</small></button>
+</div>
+</section>
+<section class="step" id="menu">
+<div class="topline"><button class="back" onclick="show('home')">← Cambiar negocio</button><span class="badge" id="businessBadge">☕ Cafetería</span></div>
+<span class="eyebrow">Paso 1</span><h1>¿Cómo quieres empezar?</h1><p>Elige una plantilla lista para personalizar. Es la forma más rápida de tener tu publicación preparada.</p>
+<div class="grid">
+<button class="choice" onclick="show('templates')"><span class="emoji">🖼️</span><strong>Usar plantillas</strong><small>Elige un diseño y cambia el texto.</small></button>
+<button class="choice" onclick="show('custom')"><span class="emoji">✨</span><strong>Crear una idea</strong><small>Describe tu publicación y prepara el texto.</small></button>
+<button class="choice" onclick="show('photoEdit')"><span class="emoji">📷</span><strong>Usar una foto del móvil</strong><small>Sube una foto para preparar un diseño.</small></button>
+<button class="choice" onclick="show('socialHub')"><span class="emoji">📲</span><strong>Publicar o compartir</strong><small>Prepara el cartel para tus redes.</small></button>
+</div>
+</section>
+<section class="step" id="templates">
+<div class="topline"><button class="back" onclick="show('menu')">← Volver</button><span class="badge" id="templateBadge"></span></div>
+<span class="eyebrow">Paso 2</span><h1>Elige tu estilo</h1><p>Toca un diseño para editarlo a tu gusto.</p><div class="grid" id="templateGrid"></div>
+</section>
+<section class="step" id="edit">
+<div class="topline"><button class="back" onclick="show('templates')">← Plantillas</button><span class="badge">Personalización</span></div>
+<span class="eyebrow">Paso 3</span><h1>Hazlo tuyo</h1><p>Cambia los textos y los colores. La vista previa se actualizará al momento.</p>
+<label class="field" for="smallText">Nombre del negocio</label><input id="smallText" maxlength="40" value="TU NEGOCIO">
+<label class="field" for="headline">Texto principal</label><textarea id="headline" maxlength="100">UN BUEN DÍA EMPIEZA AQUÍ</textarea>
+<label class="field" for="footText">Oferta, precio o llamada a la acción</label><input id="footText" maxlength="100" value="¡Te esperamos!">
+<label class="field" for="templateFontSize">Tamaño del texto principal</label><input id="templateFontSize" type="range" min="22" max="54" value="36"><div class="tag">Desliza para hacer el texto más pequeño o más grande.</div>
+<label class="field" for="bgColor">Color de fondo (elige cualquier color)</label><input id="bgColor" type="color" value="#ffe08a" style="height:48px;padding:4px">
+<label class="field" for="textColor">Color del texto (elige cualquier color)</label><input id="textColor" type="color" value="#20203a" style="height:48px;padding:4px">
+<label class="field" for="openingTime">Hora de apertura (opcional)</label><input id="openingTime" type="time">
+<label class="field" for="closingTime">Hora de cierre (opcional)</label><input id="closingTime" type="time">
+<label class="field" for="openingDays">Días de apertura (opcional)</label><input id="openingDays" maxlength="70" placeholder="Ej.: De lunes a sábado">
+<label class="field" for="contactPhone">Teléfono de contacto (opcional)</label><input id="contactPhone" type="tel" maxlength="30" placeholder="Ej.: 600 123 456">
+<label class="field" for="phoneLabel">Texto junto al teléfono</label><input id="phoneLabel" maxlength="45" placeholder="Ej.: Reservas y citas">
+<label class="field" for="miniFontSize">Tamaño del nombre del negocio</label><input id="miniFontSize" type="range" min="10" max="32" value="16">
+<label class="field" for="footFontSize">Tamaño del texto inferior</label><input id="footFontSize" type="range" min="10" max="34" value="18">
+<label class="field"><input id="templateNoBg" type="checkbox" checked style="width:auto;margin-right:8px">Texto sin recuadro</label>
+<div class="tag">En la vista previa puedes arrastrar cada texto con el dedo para colocarlo.</div>
+<div class="preview" id="preview"><div class="art"><div class="mini draggable-text" id="pvSmall" data-item="small">TU NEGOCIO</div><div class="headline draggable-text" id="pvHeadline" data-item="headline">UN BUEN DÍA EMPIEZA AQUÍ</div><div class="foot draggable-text" id="pvFoot" data-item="foot">¡Te esperamos!</div><div class="foot draggable-text" id="pvContact" data-item="contact"></div></div></div>
+<div class="actions"><button class="btn primary" onclick="downloadDesign()">⬇ Descargar imagen</button><button class="btn secondary" onclick="show('templates')">Elegir otra plantilla</button></div>
+<div class="notice">Consejo: revisa los precios y los datos antes de publicar. Esta versión no sube nada a tus redes automáticamente.</div>
+</section>
+<section class="step" id="aiStudio">
+<div class="topline"><button class="back" onclick="show('menu')">← Volver</button><span class="badge">Estudio creativo</span></div>
+<span class="eyebrow">Cartel publicitario</span><h1>Crea un anuncio con imagen y oferta.</h1>
+<p>Elige el producto, describe la escena y añade los datos de tu promoción. Esta demo prepara el cartel con una imagen de muestra; la generación real con IA se conectará en una fase posterior.</p>
+<label class="field" for="aiProduct">¿Qué quieres anunciar?</label>
+<select id="aiProduct">
+<option>Café espumoso y tostada</option><option>Croissant y café</option><option>Tarta y café</option><option>Hamburguesa con patatas</option><option>Pizza recién hecha</option><option>Menú del día</option><option>Peinado y tratamiento</option><option>Otro producto</option>
+</select>
+<label class="field" for="aiScene">Describe cómo quieres que sea la imagen</label>
+<textarea id="aiScene">Un café con espuma cremosa y una tostada recién hecha sobre una mesa de madera, con luz cálida de cafetería y fotografía gastronómica profesional.</textarea>
+<label class="field" for="aiBusiness">Nombre del negocio</label><input id="aiBusiness" maxlength="45" placeholder="Ej.: Cafetería La Plaza">
+<label class="field" for="aiOffer">Oferta o texto principal</label><input id="aiOffer" maxlength="80" value="¡Empieza el día con energía!">
+<label class="field" for="aiPrice">Precio</label><input id="aiPrice" maxlength="30" value="Desayuno completo · 3,50 €">
+<label class="field" for="aiMood">Estilo del cartel</label>
+<select id="aiMood"><option value="warm">Cálido y acogedor</option><option value="fresh">Fresco y luminoso</option><option value="premium">Elegante y prémium</option><option value="bold">Colorido y llamativo</option></select>
+<div class="actions"><button class="btn primary" onclick="buildAiPoster()">✨ Crear vista previa del cartel</button></div>
+<div class="notice">Esta versión no genera todavía una fotografía original mediante IA. Crea una vista previa de demostración para probar la composición y los textos.</div>
+<div id="aiResult" hidden>
+<div class="preview" id="aiPoster">
+<div class="posterPhoto" id="posterPhoto"><div class="photoCup">☕</div><div class="photoFood">🥐</div><div class="photoCaption">FOTOGRAFÍA DE PRODUCTO · DEMO</div></div>
+<div class="posterCopy"><div class="posterBusiness" id="posterBusiness">TU NEGOCIO</div><div class="posterOffer" id="posterOffer">¡Empieza el día con energía!</div><div class="posterPrice" id="posterPrice">Desayuno completo · 3,50 €</div></div>
+</div>
+<div class="actions"><button class="btn primary" onclick="downloadAiPoster()">⬇ Descargar cartel</button><button class="btn secondary" onclick="buildAiPoster()">Actualizar vista previa</button></div>
+</div>
+</section>
+<section class="step" id="photoEdit">
+<div class="topline"><button class="back" onclick="show('menu')">← Volver</button><span class="badge">Tu fotografía</span></div>
+<span class="eyebrow">Editar una foto</span><h1>Empieza con una imagen de tu móvil.</h1>
+<p>Selecciona una fotografía de tu galería y prepara una publicación. En esta versión podrás añadir texto y filtros sencillos; la edición generativa con IA se conectará después.</p>
+<label class="field" for="photoFile">Elegir foto del teléfono</label><input id="photoFile" type="file" accept="image/*">
+<div id="uploadedPreview" class="uploaded-preview" hidden><img id="uploadedImage" alt="Vista previa de tu foto"><div class="uploaded-overlay" id="uploadedOverlay">TU OFERTA AQUÍ</div></div>
+<label class="field" for="photoText">Texto que quieres añadir</label><input id="photoText" maxlength="120" value="¡Descubre nuestra oferta!">
+<label class="field" for="photoFontSize">Tamaño de la letra</label><input id="photoFontSize" type="range" min="16" max="56" value="32"><div class="tag">Arrastra el texto con el dedo sobre la foto para colocarlo donde quieras.</div>
+<label class="field" for="photoTextColor">Color de la letra</label><input id="photoTextColor" type="color" value="#ffffff" style="height:48px;padding:4px">
+<label class="field"><input id="photoNoBg" type="checkbox" checked style="width:auto;margin-right:8px">Mostrar solo las letras, sin recuadro</label>
+<label class="field" for="photoTextBg">Color del fondo del texto</label><input id="photoTextBg" type="color" value="#000000" style="height:48px;padding:4px">
+<label class="field"><input id="photoOutlineEnabled" type="checkbox" style="width:auto;margin-right:8px">Añadir borde a las letras</label>
+<label class="field" for="photoOutlineColor">Color del borde</label><input id="photoOutlineColor" type="color" value="#000000" style="height:48px;padding:4px">
+<label class="field" for="photoOutlineWidth">Grosor del borde</label><input id="photoOutlineWidth" type="range" min="0" max="6" value="2">
+<label class="field" for="photoFilter">Estilo de imagen</label><select id="photoFilter"><option value="none">Original</option><option value="warm">Cálido</option><option value="bright">Luminoso</option><option value="mono">Blanco y negro</option><option value="vivid">Intenso</option></select>
+<div class="actions"><button class="btn primary" onclick="applyPhotoChanges()">Aplicar cambios</button><button class="btn secondary" onclick="downloadPhotoPoster()">⬇ Descargar publicación</button></div>
+<div class="notice">La foto se procesa en esta página. No se envía a ningún servicio externo. La modificación real de objetos o fondos mediante IA llegará al conectar el proveedor.</div>
+</section>
+<section class="step" id="socialHub">
+<div class="topline"><button class="back" onclick="show('menu')">← Volver</button><span class="badge">Compartir</span></div>
+<span class="eyebrow">Tu publicación lista</span><h1>Compártela con tus clientes.</h1>
+<p>Comparte el último cartel que hayas creado. Si tu móvil lo permite, se abrirá el menú para enviar la imagen real por WhatsApp u otra aplicación.</p>
+<div class="grid">
+<button class="choice" onclick="shareOrExplain('Compartir')"><span class="emoji">📤</span><strong>Compartir cartel (imagen)</strong><small>Abrir el menú de Android para elegir una aplicación compatible</small></button>
+<button class="choice" onclick="downloadLastPoster()"><span class="emoji">⬇️</span><strong>Descargar cartel</strong><small>Guardar la imagen para publicarla manualmente</small></button>
+</div>
+<div id="shareMessage" class="notice" aria-live="polite">Las redes pueden pedirte que confirmes la publicación dentro de su propia aplicación.</div>
+</section>
+<section class="step" id="custom">
+<div class="topline"><button class="back" onclick="show('menu')">← Volver</button><span class="badge">Idea nueva</span></div>
+<span class="eyebrow">Crea tu concepto</span><h1>Cuéntanos qué quieres anunciar.</h1><p>Escribe una idea. La aplicación te propondrá un texto que luego podrás llevar a una plantilla.</p>
+<label class="field" for="idea">¿Qué quieres publicar?</label><textarea id="idea" placeholder="Ej.: oferta de desayunos, café y tostada por 3,50 €..."></textarea>
+<div class="actions"><button class="btn primary" onclick="makeCopy()">✨ Preparar texto</button></div>
+<div id="suggestion" class="notice" hidden></div><div class="actions" id="useIdeaActions" hidden><button class="btn secondary" onclick="useSuggestion()">Usar este texto en un diseño</button></div>
+</section>
+</main>
+<footer>Mi Negocio Publica · Prototipo inicial · Tus diseños se crean en este dispositivo.</footer>
+</div>
+<script>
+const designs={
+'Cafetería':[
+{title:'Desayuno especial',mini:'BUENOS DÍAS ☀️',head:'TU PAUSA\\nFAVORITA',foot:'Café + tostada · Desde 3,50 €',bg:'#ffe08a',fg:'#20203a'},
+{title:'Café para llevar',mini:'HECHO CON CARIÑO',head:'UN CAFÉ\\nY A POR EL DÍA',foot:'Pídelo para llevar ☕',bg:'#25233d',fg:'#ffffff'},
+ {title:'Novedad de la casa',mini:'NUEVO EN LA BARRA',head:'PRUÉBALO\\nHOY',foot:'Te esperamos',bg:'#d9f3e7',fg:'#20203a'},
+{title:'Oferta relámpago',mini:'SOLO POR TI',head:'HOY HAY\\nANTOJO',foot:'Pregunta por nuestra oferta',bg:'#ffe1d6',fg:'#20203a'},
+{title:'Producto destacado',mini:'RECOMENDACIÓN DEL DÍA',head:'TU FAVORITO\\nTE ESPERA',foot:'Ven a descubrirlo',bg:'#e6dcff',fg:'#20203a'},
+{title:'Invitación a volver',mini:'NOS ENCANTA VERTE',head:'TU MESA\\nESTÁ LISTA',foot:'Pásate cuando quieras',bg:'#dff3ff',fg:'#20203a'}],
+'Restaurante':[
+{title:'Menú del día',mini:'HOY EN LA MESA',head:'MENÚ\\nDEL DÍA',foot:'Primero + segundo + bebida',bg:'#ffe1d6',fg:'#20203a'},
+{title:'Especial de la casa',mini:'RECIÉN HECHO',head:'SABOR QUE\\nSE RECUERDA',foot:'Reserva tu mesa',bg:'#25233d',fg:'#ffffff'},
+ {title:'Plan de fin de semana',mini:'ESTE FINDE',head:'MESA, BUENA\\nCOMIDA Y MÁS',foot:'¡Te esperamos!',bg:'#e6dcff',fg:'#20203a'},
+{title:'Plato estrella',mini:'DE NUESTRA COCINA',head:'SABOR\\nEN CADA BOCADO',foot:'Pregunta por el plato del día',bg:'#d9f3e7',fg:'#20203a'},
+{title:'Reserva una mesa',mini:'PLAN PERFECTO',head:'HOY SE COME\\nFUERA',foot:'Reserva tu mesa',bg:'#dff3ff',fg:'#20203a'},
+{title:'Oferta especial',mini:'POR TI',head:'BUEN SABOR,\\nBUEN PRECIO',foot:'Consulta la oferta',bg:'#ffe08a',fg:'#20203a'}],
+'Peluquería':[
+{title:'Cambio de look',mini:'TU MOMENTO',head:'NUEVO LOOK,\\nNUEVA ENERGÍA',foot:'Pide tu cita ✂️',bg:'#e6dcff',fg:'#20203a'},
+{title:'Oferta especial',mini:'PROMOCIÓN',head:'MÍMATE\\nUN POQUITO',foot:'Consulta nuestros servicios',bg:'#ffe1d6',fg:'#20203a'},
+ {title:'Reserva tu cita',mini:'HORA DE CUIDARTE',head:'TU ESTILO\\nEMPIEZA AQUÍ',foot:'Reserva por teléfono',bg:'#25233d',fg:'#ffffff'},
+{title:'Antes y después',mini:'CAMBIO DE LOOK',head:'MIRA LA\\nDIFERENCIA',foot:'Pide tu valoración',bg:'#d9f3e7',fg:'#20203a'},
+{title:'Cuidado personal',mini:'UN MOMENTO PARA TI',head:'TE MERECES\\nESTE RATITO',foot:'Reserva tu cita',bg:'#dff3ff',fg:'#20203a'},
+{title:'Servicio destacado',mini:'NUEVO SERVICIO',head:'TU MEJOR\\nVERSIÓN',foot:'Pregúntanos sin compromiso',bg:'#ffe08a',fg:'#20203a'}]};
+let business='Cafetería', emoji='☕', selected=null, suggestion='';
+function show(id){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function chooseBusiness(name,icon){business=name;emoji=icon;document.getElementById('businessBadge').textContent=icon+' '+name;document.getElementById('templateBadge').textContent=name;renderTemplates();show('menu');}
+function renderTemplates(){const grid=document.getElementById('templateGrid');grid.innerHTML='';designs[business].forEach((d,i)=>{const b=document.createElement('button');b.className='template';b.innerHTML=`<div class="art" style="background:${d.bg};color:${d.fg}"><div class="mini">${d.mini}</div><div class="headline">${d.head.replace(/\\n/g,'<br>')}</div><div class="foot">${d.foot}</div></div><label>${d.title}</label><small>Tocar para editar</small>`;b.onclick=()=>editDesign(d);grid.appendChild(b);});}
+function editDesign(d){selected={...d};document.getElementById('smallText').value=d.mini;document.getElementById('headline').value=d.head.replace(/\\n/g,' ');document.getElementById('footText').value=d.foot;document.getElementById('bgColor').value=d.bg;document.getElementById('textColor').value=d.fg;updatePreview();show('edit');}
+const templatePositions={small:{x:50,y:10},headline:{x:50,y:43},foot:{x:50,y:82},contact:{x:50,y:91}};
+function updatePreview(){
+ const art=document.querySelector('#preview .art');art.style.background=document.getElementById('bgColor').value;art.style.color=document.getElementById('textColor').value;
+ document.getElementById('pvSmall').textContent=document.getElementById('smallText').value;
+ document.getElementById('pvHeadline').textContent=document.getElementById('headline').value;
+ const op=document.getElementById('openingTime').value,cl=document.getElementById('closingTime').value,days=document.getElementById('openingDays').value.trim();
+ let foot=document.getElementById('footText').value;const hrs=(op||cl)?'Horario: '+(op||'')+(op&&cl?'–':'')+(cl||''):'';foot=[foot,hrs,days].filter(Boolean).join('\n');document.getElementById('pvFoot').textContent=foot;
+ const phone=document.getElementById('contactPhone').value.trim(),label=document.getElementById('phoneLabel').value.trim();document.getElementById('pvContact').textContent=phone?[label,phone].filter(Boolean).join(': '):'';
+ document.getElementById('pvHeadline').style.fontSize=document.getElementById('templateFontSize').value+'px';document.getElementById('pvSmall').style.fontSize=document.getElementById('miniFontSize').value+'px';document.getElementById('pvFoot').style.fontSize=document.getElementById('footFontSize').value+'px';
+ const noBg=document.getElementById('templateNoBg').checked;[...art.querySelectorAll('.draggable-text')].forEach(el=>{el.style.background=noBg?'transparent':'rgba(0,0,0,.25)';const pos=templatePositions[el.dataset.item];el.style.left=pos.x+'%';el.style.top=pos.y+'%';});
+}
+['smallText','headline','footText','bgColor','textColor','templateFontSize','openingTime','closingTime','openingDays','contactPhone','phoneLabel','miniFontSize','footFontSize','templateNoBg'].forEach(id=>document.getElementById(id).addEventListener('input',updatePreview));
+let latestPosterBlob=null;
+function saveCanvasAndDownload(canvas,filename){canvas.toBlob(blob=>{if(!blob){alert('No se pudo preparar la imagen.');return;}latestPosterBlob=blob;latestPosterName=filename;const url=URL.createObjectURL(blob);const a=document.createElement('a');a.download=filename;a.href=url;a.click();setTimeout(()=>URL.revokeObjectURL(url),15000);},'image/png');}
+let latestPosterName='mi-negocio-publica.png';
+let draggingTemplate=null;
+document.querySelectorAll('#preview .draggable-text').forEach(el=>{el.addEventListener('pointerdown',e=>{draggingTemplate=el.dataset.item;el.setPointerCapture(e.pointerId);e.preventDefault();});el.addEventListener('pointermove',e=>{if(draggingTemplate!==el.dataset.item)return;const r=document.querySelector('#preview .art').getBoundingClientRect();templatePositions[draggingTemplate]={x:Math.max(3,Math.min(97,(e.clientX-r.left)/r.width*100)),y:Math.max(3,Math.min(97,(e.clientY-r.top)/r.height*100))};updatePreview();});const stop=()=>{if(draggingTemplate===el.dataset.item)draggingTemplate=null;};el.addEventListener('pointerup',stop);el.addEventListener('pointercancel',stop);});
+function downloadDesign(){
+ const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const c=canvas.getContext('2d');c.fillStyle=document.getElementById('bgColor').value;c.fillRect(0,0,1080,1350);c.fillStyle=document.getElementById('textColor').value;c.textAlign='center';c.textBaseline='middle';
+ const noBg=document.getElementById('templateNoBg').checked;const items=[
+ {id:'small',text:document.getElementById('smallText').value,size:Number(document.getElementById('miniFontSize').value)*2.1,weight:900},
+ {id:'headline',text:document.getElementById('headline').value,size:Number(document.getElementById('templateFontSize').value)*2.1,weight:950},
+ {id:'foot',text:document.getElementById('pvFoot').textContent,size:Number(document.getElementById('footFontSize').value)*2.1,weight:750},
+ {id:'contact',text:document.getElementById('pvContact').textContent,size:30,weight:750}
+ ];
+ items.forEach(it=>{if(!it.text.trim())return;const pos=templatePositions[it.id],x=pos.x/100*1080,y=pos.y/100*1350;const lines=it.text.split('\n');c.font=it.weight+' '+Math.round(it.size)+'px system-ui';const lineH=Math.round(it.size*1.16),maxW=1000;let wrapped=[];lines.forEach(line=>{let cur='';line.split(/\s+/).forEach(word=>{const test=cur?cur+' '+word:word;if(c.measureText(test).width>maxW&&cur){wrapped.push(cur);cur=word;}else cur=test;});if(cur)wrapped.push(cur);});const total=wrapped.length*lineH;if(!noBg){const widest=Math.min(maxW,Math.max(...wrapped.map(line=>c.measureText(line).width))+30);c.fillStyle='rgba(0,0,0,.25)';c.fillRect(x-widest/2,y-total/2-10,widest,total+20);c.fillStyle=document.getElementById('textColor').value;}wrapped.forEach((line,i)=>c.fillText(line,x,y-total/2+lineH*(i+.5),maxW));});
+ c.globalAlpha=.6;c.font='24px system-ui';c.fillText('MI NEGOCIO PUBLICA',540,1310);saveCanvasAndDownload(canvas,'mi-negocio-publica.png');
+}
+function wrapText(c,text,x,y,maxWidth,lineHeight){const words=text.split(/\s+/);let line='';for(const word of words){const test=line?line+' '+word:word;if(c.measureText(test).width>maxWidth&&line){c.fillText(line,x,y);line=word;y+=lineHeight;}else line=test;}if(line)c.fillText(line,x,y);}
+function makeCopy(){const idea=document.getElementById('idea').value.trim();if(!idea){alert('Escribe primero qué quieres anunciar.');return;}suggestion=`${business.toUpperCase()}\\n${idea}\\n¡Te esperamos!`;const box=document.getElementById('suggestion');box.hidden=false;box.textContent='Propuesta de texto: '+suggestion;document.getElementById('useIdeaActions').hidden=false;}
+function useSuggestion(){editDesign({title:'Mi idea',mini:business.toUpperCase(),head:document.getElementById('idea').value.trim().toUpperCase(),foot:'¡Te esperamos!',bg:'#ffe08a',fg:'#20203a'});}
+
+
+let uploadedPhotoUrl='';
+let photoTextPosition={x:50,y:78};
+const uploadedPreview=document.getElementById('uploadedPreview');
+const uploadedOverlay=document.getElementById('uploadedOverlay');
+function updatePhotoTextStyle(){
+ const size=Number(document.getElementById('photoFontSize').value)||32;
+ const color=document.getElementById('photoTextColor').value||'#ffffff';
+ const bg=document.getElementById('photoTextBg').value||'#000000';
+ uploadedOverlay.style.left=photoTextPosition.x+'%';uploadedOverlay.style.top=photoTextPosition.y+'%';
+ uploadedOverlay.style.fontSize='clamp(16px, '+(size/4)+'vw, '+size+'px)';
+ uploadedOverlay.style.color=color;uploadedOverlay.style.background=document.getElementById('photoNoBg').checked?'transparent':hexToRgba(bg,.38);const outlineOn=document.getElementById('photoOutlineEnabled').checked;const ow=Number(document.getElementById('photoOutlineWidth').value)||0;const oc=document.getElementById('photoOutlineColor').value||'#000000';uploadedOverlay.style.webkitTextStroke=outlineOn&&ow>0?(ow+'px '+oc):'0 transparent';uploadedOverlay.style.borderRadius=document.getElementById('photoNoBg').checked?'0':'10px';uploadedOverlay.style.border='0';
+}
+function hexToRgba(hex,alpha){const h=(hex||'#000000').replace('#','');const n=parseInt(h.length===3?h.split('').map(x=>x+x).join(''):h,16);if(!Number.isFinite(n))return `rgba(0,0,0,${alpha})`;return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${alpha})`;}
+document.getElementById('photoFile').addEventListener('change',function(){
+ const file=this.files&&this.files[0];if(!file)return;
+ if(!file.type.startsWith('image/')){alert('Elige un archivo de imagen.');return;}
+ if(uploadedPhotoUrl)URL.revokeObjectURL(uploadedPhotoUrl);
+ uploadedPhotoUrl=URL.createObjectURL(file);
+ const img=document.getElementById('uploadedImage');img.onload=()=>{uploadedPreview.hidden=false;applyPhotoChanges();};img.src=uploadedPhotoUrl;
+});
+document.getElementById('photoText').addEventListener('input',()=>{uploadedOverlay.textContent=document.getElementById('photoText').value;});
+['photoFontSize','photoTextColor','photoTextBg','photoNoBg','photoOutlineEnabled','photoOutlineColor','photoOutlineWidth'].forEach(id=>document.getElementById(id).addEventListener('input',updatePhotoTextStyle));['photoNoBg','photoOutlineEnabled'].forEach(id=>document.getElementById(id).addEventListener('change',updatePhotoTextStyle));
+let draggingPhotoText=false;
+uploadedOverlay.addEventListener('pointerdown',e=>{draggingPhotoText=true;uploadedOverlay.setPointerCapture(e.pointerId);e.preventDefault();});
+uploadedOverlay.addEventListener('pointermove',e=>{if(!draggingPhotoText)return;const r=uploadedPreview.getBoundingClientRect();if(!r.width||!r.height)return;photoTextPosition.x=Math.max(8,Math.min(92,((e.clientX-r.left)/r.width)*100));photoTextPosition.y=Math.max(6,Math.min(94,((e.clientY-r.top)/r.height)*100));updatePhotoTextStyle();});
+function stopPhotoTextDrag(){draggingPhotoText=false;}
+uploadedOverlay.addEventListener('pointerup',stopPhotoTextDrag);uploadedOverlay.addEventListener('pointercancel',stopPhotoTextDrag);
+function applyPhotoChanges(){
+ const img=document.getElementById('uploadedImage');if(!uploadedPhotoUrl||!img.naturalWidth){alert('Elige primero una foto del teléfono.');return;}
+ const filters={none:'none',warm:'sepia(.22) saturate(1.15)',bright:'brightness(1.12) saturate(1.08)',mono:'grayscale(1)',vivid:'saturate(1.5) contrast(1.08)'};
+ img.style.filter=filters[document.getElementById('photoFilter').value]||'none';
+ uploadedOverlay.textContent=document.getElementById('photoText').value;updatePhotoTextStyle();
+}
+function downloadPhotoPoster(){
+ const img=document.getElementById('uploadedImage');if(!uploadedPhotoUrl||!img.naturalWidth){alert('Elige primero una foto del teléfono.');return;}
+ const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const c=canvas.getContext('2d');
+ const iw=img.naturalWidth,ih=img.naturalHeight;const scale=Math.max(1080/iw,1350/ih),dw=iw*scale,dh=ih*scale;c.filter=img.style.filter||'none';c.drawImage(img,(1080-dw)/2,(1350-dh)/2,dw,dh);c.filter='none';
+ const x=photoTextPosition.x/100*1080,y=photoTextPosition.y/100*1350;const size=Number(document.getElementById('photoFontSize').value)||32;
+ const text=document.getElementById('photoText').value||'¡Descubre nuestra oferta!';c.font='900 '+Math.round(size*2.15)+'px system-ui';c.textAlign='center';c.textBaseline='middle';
+ const maxWidth=960,lineHeight=Math.round(size*2.55),words=text.split(/\s+/);let lines=[],line='';for(const word of words){const test=line?line+' '+word:word;if(c.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);
+ const totalHeight=lines.length*lineHeight,pad=20;if(!document.getElementById('photoNoBg').checked){c.fillStyle=hexToRgba(document.getElementById('photoTextBg').value,.38);c.fillRect(Math.max(0,x-500),Math.max(0,y-totalHeight/2-pad),Math.min(1080,1000),Math.min(1350,totalHeight+pad*2));}
+ c.textAlign='center';c.fillStyle=document.getElementById('photoTextColor').value;const outlineOn=document.getElementById('photoOutlineEnabled').checked;const ow=(Number(document.getElementById('photoOutlineWidth').value)||0)*2.15;c.lineJoin='round';c.strokeStyle=document.getElementById('photoOutlineColor').value;if(outlineOn&&ow>0)c.lineWidth=ow;c.shadowColor='transparent';c.shadowBlur=0;lines.forEach((ln,i)=>{const yy=y-totalHeight/2+lineHeight*(i+.5);if(outlineOn&&ow>0)c.strokeText(ln,x,yy,maxWidth);c.fillText(ln,x,yy,maxWidth);});
+ saveCanvasAndDownload(canvas,'mi-negocio-publica-foto.png');
+}
+
+async function shareOrExplain(network){
+ const msg=document.getElementById('shareMessage');
+ if(!latestPosterBlob){msg.textContent='Todavía no hay ningún cartel preparado en esta sesión. Crea o descarga el cartel primero y después vuelve a compartirlo.';return;}
+ const file=new File([latestPosterBlob],latestPosterName||'mi-negocio-publica.png',{type:'image/png'});
+ if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+  try{await navigator.share({files:[file],title:'Mi Negocio Publica'});msg.textContent='Se ha abierto el menú de compartir con el archivo de imagen del cartel.';return;}
+  catch(e){if(e&&e.name==='AbortError'){msg.textContent='Has cerrado el menú de compartir. El cartel sigue preparado y puedes descargarlo.';return;}msg.textContent='No se pudo compartir directamente. Pulsa «Descargar cartel» y compártelo desde la galería del móvil.';return;}
+ }
+ msg.textContent='Este navegador no admite compartir el archivo de imagen directamente. Pulsa «Descargar cartel» y luego abre la galería del móvil para compartirlo.';
+}
+function downloadLastPoster(){const msg=document.getElementById('shareMessage');if(!latestPosterBlob){msg.textContent='Primero crea y descarga un cartel.';return;}const url=URL.createObjectURL(latestPosterBlob);const a=document.createElement('a');a.href=url;a.download=latestPosterName||'mi-negocio-publica.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),15000);msg.textContent='Descargando el cartel como imagen PNG.';}
+
+function initAiStudio(){
+  const b=document.getElementById('aiBusiness');
+  if(!b.value.trim()) b.value=business;
+  show('aiStudio');
+}
+function buildAiPoster(){
+  const scene=document.getElementById('aiScene').value.trim();
+  if(!scene){alert('Describe la imagen que quieres para tu cartel.');return;}
+  const result=document.getElementById('aiResult');
+  result.hidden=false;
+  document.getElementById('posterBusiness').textContent=(document.getElementById('aiBusiness').value.trim()||business).toUpperCase();
+  document.getElementById('posterOffer').textContent=document.getElementById('aiOffer').value.trim()||'Una oferta especial';
+  document.getElementById('posterPrice').textContent=document.getElementById('aiPrice').value.trim()||'¡Te esperamos!';
+  const product=document.getElementById('aiProduct').value;
+  const photo=document.getElementById('posterPhoto');
+  photo.querySelector('.photoCup').textContent=product.toLowerCase().includes('café')||product.toLowerCase().includes('cafe')?'☕':product.toLowerCase().includes('pizza')?'🍕':product.toLowerCase().includes('hamburguesa')?'🍔':product.toLowerCase().includes('tarta')?'🍰':product.toLowerCase().includes('peinado')?'✂️':'🥐';
+  photo.querySelector('.photoFood').textContent=product.toLowerCase().includes('pizza')?'🧀':product.toLowerCase().includes('hamburguesa')?'🍟':product.toLowerCase().includes('peinado')?'✨':'🥐';
+  document.getElementById('aiPoster').className='preview mood-'+document.getElementById('aiMood').value;
+  result.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function downloadAiPoster(){
+  const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const c=canvas.getContext('2d');
+  const mood=document.getElementById('aiMood').value;
+  const gradients={warm:['#c78b54','#533521'],fresh:['#f1d9a0','#416b58'],premium:['#c7a46d','#17161c'],bold:['#ffb84d','#752b54']};
+  const g=c.createLinearGradient(0,0,1080,700);g.addColorStop(0,gradients[mood][0]);g.addColorStop(1,gradients[mood][1]);c.fillStyle=g;c.fillRect(0,0,1080,760);
+  const prod=document.getElementById('aiProduct').value.toLowerCase();const icon=prod.includes('pizza')?'🍕':prod.includes('hamburguesa')?'🍔':prod.includes('tarta')?'🍰':prod.includes('peinado')?'✂️':'☕';
+  c.textAlign='center';c.font='240px system-ui';c.fillText(icon,540,430);c.fillStyle='#ffffffcc';c.font='bold 24px system-ui';c.fillText('IMAGEN DE MUESTRA · DEMO',540,700);
+  const premium=mood==='premium';c.fillStyle=premium?'#25233d':'#fff8e9';c.fillRect(0,760,1080,590);c.fillStyle=premium?'#ffffff':'#292235';
+  c.font='bold 30px system-ui';c.fillText((document.getElementById('aiBusiness').value.trim()||business).toUpperCase(),540,840);
+  c.font='900 62px system-ui';wrapTextCentered(c,document.getElementById('aiOffer').value.trim()||'Una oferta especial',540,955,920,78);
+  c.fillStyle=mood==='premium'?'#c7a46d':mood==='fresh'?'#317a5a':mood==='bold'?'#d84b35':'#6b4eff';c.fillRect(170,1135,740,105);c.fillStyle=mood==='premium'?'#25233d':'#ffffff';c.font='bold 42px system-ui';wrapTextCentered(c,document.getElementById('aiPrice').value.trim()||'¡Te esperamos!',540,1165,680,48);
+  saveCanvasAndDownload(canvas,'mi-negocio-publica-cartel-demo.png');
+}
+function wrapTextCentered(c,text,centerX,y,maxWidth,lineHeight){const words=text.split(/\\s+/);let line='';let lines=[];for(const word of words){const test=line?line+' '+word:word;if(c.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);lines.slice(0,3).forEach((ln,i)=>c.fillText(ln,centerX,y+i*lineHeight));}
+
+renderTemplates();
+document.querySelectorAll('.business-choice').forEach(button => {
+  button.addEventListener('click', () => chooseBusiness(button.dataset.business, button.dataset.emoji));
+});
+</script>
+</body>
+</html>
