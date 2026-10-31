@@ -22,10 +22,11 @@ label.field{display:block;font-size:13px;font-weight:800;margin:13px 0 6px}input
 footer{padding:15px 18px 24px;text-align:center;color:#8b8799;font-size:11px}
 
 
-.uploaded-preview{position:relative;max-width:420px;margin:12px auto;border-radius:16px;overflow:hidden;background:#eee}
-.uploaded-preview img{display:block;width:100%;max-height:460px;object-fit:contain;filter:none}
-.uploaded-overlay{position:absolute;left:50%;top:78%;transform:translate(-50%,-50%);width:90%;padding:10px 12px;text-align:center;color:#ffffff;font-size:clamp(20px,5vw,32px);font-weight:950;text-shadow:0 2px 8px #000;background:#00000038;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;touch-action:none;cursor:move;user-select:none;-webkit-user-select:none;border:0}
-.posterPhoto{height:230px;position:relative;display:flex;align-items:center;justify-content:center;gap:8px;overflow:hidden;background:radial-gradient(ellipse at 50% 80%,#c78b54 0,#a76736 38%,#533521 100%);color:#fff}
+.uploaded-preview{position:sticky;top:8px;z-index:20;max-width:420px;height:min(42vh,360px);min-height:170px;margin:12px auto 16px;border:4px solid #fff;border-radius:16px;overflow:hidden;background:#eee;box-shadow:0 6px 20px #21144b22}
+.uploaded-preview img{display:block;width:100%;height:100%;max-height:none;object-fit:contain;filter:none}
+/* La vista previa permanece visible mientras se desplaza por los controles de la foto. */
+.uploaded-overlay{position:absolute;left:50%;top:78%;transform:translate(-50%,-50%);width:90%;max-width:90%;max-height:24%;padding:6px 8px;text-align:center;color:#ffffff;font-size:clamp(8px,4vw,32px);font-weight:950;text-shadow:0 2px 8px #000;background:#00000038;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;line-height:1.08;overflow:hidden;box-sizing:border-box;touch-action:none;cursor:move;user-select:none;-webkit-user-select:none;border:0}
+.photo-layer{width:92%;min-height:1em;padding:3px 6px;box-sizing:border-box}.posterPhoto{height:230px;position:relative;display:flex;align-items:center;justify-content:center;gap:8px;overflow:hidden;background:radial-gradient(ellipse at 50% 80%,#c78b54 0,#a76736 38%,#533521 100%);color:#fff}
 .posterPhoto:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#ffffff28,transparent 42%,#00000030)}
 .photoCup,.photoFood{position:relative;filter:drop-shadow(0 9px 7px #24160b66);font-size:94px}
 .photoFood{font-size:76px;transform:rotate(-8deg)}
@@ -95,9 +96,30 @@ footer{padding:15px 18px 24px;text-align:center;color:#8b8799;font-size:11px}
 <span class="eyebrow">Editar una foto</span><h1>Empieza con una imagen de tu móvil.</h1>
 <p>Selecciona una fotografía de tu galería y prepara una publicación con texto y filtros sencillos.</p>
 <label class="field" for="photoFile">Elegir foto del teléfono</label><input id="photoFile" type="file" accept="image/*">
-<div id="uploadedPreview" class="uploaded-preview" hidden><img id="uploadedImage" alt="Vista previa de tu foto"><div class="uploaded-overlay" id="uploadedOverlay">TU OFERTA AQUÍ</div></div>
-<label class="field" for="photoText">Texto que quieres añadir</label><input id="photoText" maxlength="120" value="¡Descubre nuestra oferta!">
-<label class="field" for="photoFontSize">Tamaño de la letra</label><input id="photoFontSize" type="range" min="16" max="56" value="32"><div class="tag">Arrastra el texto con el dedo sobre la foto para colocarlo donde quieras.</div>
+<div id="uploadedPreview" class="uploaded-preview" hidden>
+<img id="uploadedImage" alt="Vista previa de tu foto">
+<div class="uploaded-overlay photo-layer" id="photoBusinessOverlay">TU NEGOCIO</div>
+<div class="uploaded-overlay photo-layer" id="photoHeadlineOverlay">¡Descubre nuestra oferta!</div>
+<div class="uploaded-overlay photo-layer" id="photoFootOverlay">¡Te esperamos!</div>
+<div class="uploaded-overlay photo-layer" id="photoInfoOverlay"></div>
+</div>
+<h2>Textos del cartel</h2>
+<label class="field" for="photoBusiness">Nombre del negocio</label><input id="photoBusiness" maxlength="40" value="TU NEGOCIO">
+<label class="field" for="photoBusinessSize">Tamaño del nombre</label><input id="photoBusinessSize" type="range" min="10" max="40" value="18">
+<label class="field" for="photoBusinessFont">Tipografía del nombre</label><select id="photoBusinessFont"><option value="modern">Moderna</option><option value="elegant">Elegante</option><option value="classic">Clásica</option><option value="fun">Divertida</option><option value="hand">Manuscrita</option><option value="bold">Gruesa</option></select>
+<label class="field" for="photoHeadline">Texto principal</label><textarea id="photoHeadline" maxlength="160" rows="3">¡Descubre nuestra oferta!</textarea>
+<label class="field" for="photoHeadlineSize">Tamaño del texto principal</label><input id="photoHeadlineSize" type="range" min="16" max="64" value="34">
+<label class="field" for="photoHeadlineFont">Tipografía del texto principal</label><select id="photoHeadlineFont"><option value="bold">Gruesa</option><option value="modern">Moderna</option><option value="elegant">Elegante</option><option value="classic">Clásica</option><option value="fun">Divertida</option><option value="hand">Manuscrita</option></select>
+<label class="field" for="photoFoot">Texto inferior</label><input id="photoFoot" maxlength="120" value="¡Te esperamos!">
+<label class="field" for="photoFootSize">Tamaño del texto inferior</label><input id="photoFootSize" type="range" min="10" max="40" value="18">
+<label class="field" for="photoFootFont">Tipografía del texto inferior</label><select id="photoFootFont"><option value="modern">Moderna</option><option value="elegant">Elegante</option><option value="classic">Clásica</option><option value="fun">Divertida</option><option value="hand">Manuscrita</option><option value="bold">Gruesa</option></select>
+<h2>Horario y contacto</h2>
+<label class="field" for="photoOpeningTime">Hora de apertura</label><input id="photoOpeningTime" type="time">
+<label class="field" for="photoClosingTime">Hora de cierre</label><input id="photoClosingTime" type="time">
+<label class="field" for="photoOpeningDays">Días de apertura</label><input id="photoOpeningDays" maxlength="70" placeholder="Ej.: De lunes a sábado">
+<label class="field" for="photoPhone">Teléfono de contacto</label><input id="photoPhone" type="tel" maxlength="30" placeholder="Ej.: 600 123 456">
+<label class="field" for="photoPhoneLabel">Texto junto al teléfono</label><input id="photoPhoneLabel" maxlength="45" placeholder="Ej.: Reservas y citas">
+<h2>Estilo de los textos</h2>
 <label class="field" for="photoTextColor">Color de la letra</label><input id="photoTextColor" type="color" value="#ffffff" style="height:48px;padding:4px">
 <label class="field"><input id="photoNoBg" type="checkbox" checked style="width:auto;margin-right:8px">Mostrar solo las letras, sin recuadro</label>
 <label class="field" for="photoTextBg">Color del fondo del texto</label><input id="photoTextBg" type="color" value="#000000" style="height:48px;padding:4px">
@@ -105,6 +127,7 @@ footer{padding:15px 18px 24px;text-align:center;color:#8b8799;font-size:11px}
 <label class="field" for="photoOutlineColor">Color del borde</label><input id="photoOutlineColor" type="color" value="#000000" style="height:48px;padding:4px">
 <label class="field" for="photoOutlineWidth">Grosor del borde</label><input id="photoOutlineWidth" type="range" min="0" max="6" value="2">
 <label class="field" for="photoFilter">Estilo de imagen</label><select id="photoFilter"><option value="none">Original</option><option value="warm">Cálido</option><option value="bright">Luminoso</option><option value="mono">Blanco y negro</option><option value="vivid">Intenso</option></select>
+<div class="tag">Puedes arrastrar cada texto sobre la foto para colocarlo.</div>
 <div class="actions"><button class="btn primary" onclick="applyPhotoChanges()">Aplicar cambios</button><button class="btn secondary" onclick="savePhotoDesign()">💾 Guardar diseño con foto</button><button class="btn secondary" onclick="downloadPhotoPoster()">⬇ Descargar publicación</button></div>
 <div class="notice">La foto se procesa en esta página. No se envía a ningún servicio externo. </div>
 </section>
@@ -167,7 +190,7 @@ function renderTemplates(){
  if(own.length){const ownHeading=document.createElement('div');ownHeading.className='template-section';ownHeading.textContent='⭐ MIS DISEÑOS PROPIOS · GUARDADOS POR MÍ';grid.appendChild(ownHeading);}
  saved.forEach((item,index)=>{if(item.business!==business)return;const v=item.values||{};const card=document.createElement('div');card.className='template saved-template';
  const art=document.createElement('div');art.className='art';art.style.position='relative';art.style.overflow='hidden';
- if(item.type==='photo'&&item.photoData){const image=document.createElement('img');image.src=item.photoData;image.alt='Vista previa del diseño propio';image.style.cssText='width:100%;height:100%;object-fit:cover;position:absolute;inset:0';art.appendChild(image);const caption=document.createElement('div');caption.textContent=v.photoText||item.name;caption.style.cssText='position:absolute;left:8%;right:8%;top:'+(v.photoY||78)+'%;transform:translateY(-50%);text-align:center;color:'+(v.photoTextColor||'#fff')+';font-weight:900;font-size:clamp(12px,4vw,24px);text-shadow:0 2px 5px #000';art.appendChild(caption);}
+ if(item.type==='photo'&&item.photoData){const image=document.createElement('img');image.src=item.photoData;image.alt='Vista previa del diseño propio';image.style.cssText='width:100%;height:100%;object-fit:cover;position:absolute;inset:0';art.appendChild(image);const caption=document.createElement('div');caption.textContent=v.photoHeadline||v.photoText||item.name;caption.style.cssText='position:absolute;left:8%;right:8%;top:'+(v.photoY||78)+'%;transform:translateY(-50%);text-align:center;color:'+(v.photoTextColor||'#fff')+';font-weight:900;font-size:clamp(12px,4vw,24px);text-shadow:0 2px 5px #000';art.appendChild(caption);}
  else {art.style.background=v.bgColor||'#eee';art.style.color=v.textColor||'#222';const mini=document.createElement('div');mini.className='mini';mini.textContent=v.smallText||item.name;const head=document.createElement('div');head.className='headline';head.textContent=v.headline||'';const foot=document.createElement('div');foot.className='foot';foot.textContent=v.footText||'';art.append(mini,head,foot);}
  const label=document.createElement('label');label.textContent=item.name;const badge=document.createElement('span');badge.className='own-badge';badge.textContent='⭐ DISEÑO PROPIO';
  const edit=document.createElement('button');edit.type='button';edit.className='btn secondary';edit.textContent='Editar diseño';edit.style.marginTop='8px';edit.addEventListener('click',()=>openSavedDesign(item));
@@ -178,7 +201,7 @@ function renderTemplates(){
 function openSavedDesign(item){
  business=item.business||business;
  if(item.type==='photo'&&item.photoData){
-  const values=item.values||{};photoTextPosition={x:Number(values.photoX)||50,y:Number(values.photoY)||78};Object.entries(values).forEach(([id,val])=>{const el=document.getElementById(id);if(el){if(el.type==='checkbox')el.checked=!!val;else el.value=val;}});
+  const values=item.values||{};Object.entries(values).forEach(([id,val])=>{const el=document.getElementById(id);if(el){if(el.type==='checkbox')el.checked=!!val;else if(typeof val!=='object')el.value=val;}});if(values.photoPositions)Object.keys(photoPositions).forEach(k=>{if(values.photoPositions[k])photoPositions[k]={...values.photoPositions[k]};});else if(values.photoX!==undefined)photoPositions.headline={x:Number(values.photoX)||50,y:Number(values.photoY)||78};
   uploadedPhotoUrl=item.photoData;const img=document.getElementById('uploadedImage');img.onload=()=>{document.getElementById('uploadedPreview').hidden=false;applyPhotoChanges();show('photoEdit');};img.src=item.photoData;return;
  }
  Object.entries(item.values||{}).forEach(([id,val])=>{const el=document.getElementById(id);if(el){if(el.type==='checkbox')el.checked=!!val;else el.value=val;}});updatePreview();show('edit');
@@ -198,7 +221,7 @@ function updatePreview(){
  document.getElementById('pvSmall').style.fontFamily=fontMap[document.getElementById('smallFont').value];document.getElementById('pvHeadline').style.fontFamily=fontMap[document.getElementById('headlineFont').value];document.getElementById('pvFoot').style.fontFamily=fontMap[document.getElementById('footFont').value];
  const noBg=document.getElementById('templateNoBg').checked;[...art.querySelectorAll('.draggable-text')].forEach(el=>{el.style.background=noBg?'transparent':'rgba(0,0,0,.25)';const pos=templatePositions[el.dataset.item];el.style.left=pos.x+'%';el.style.top=pos.y+'%';});
 }
-['smallText','headline','footText','bgColor','textColor','templateFontSize','openingTime','closingTime','openingDays','contactPhone','phoneLabel','miniFontSize','footFontSize','templateNoBg','smallFont','headlineFont','footFont'].forEach(id=>document.getElementById(id).addEventListener('input',updatePreview));
+['smallText','headline','footText','bgColor','textColor','templateFontSize','openingTime','closingTime','openingDays','contactPhone','phoneLabel','miniFontSize','footFontSize','templateNoBg','smallFont','headlineFont','footFont'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',updatePreview);el.addEventListener('change',updatePreview);});
 
 const designFieldIds=['smallText','headline','footText','bgColor','textColor','openingTime','closingTime','openingDays','contactPhone','phoneLabel','templateFontSize','miniFontSize','footFontSize','smallFont','headlineFont','footFont','templateNoBg'];
 function saveReusableDesign(){
@@ -230,60 +253,96 @@ function downloadDesign(){
 }
 function wrapText(c,text,x,y,maxWidth,lineHeight){const words=text.split(/\s+/);let line='';for(const word of words){const test=line?line+' '+word:word;if(c.measureText(test).width>maxWidth&&line){c.fillText(line,x,y);line=word;y+=lineHeight;}else line=test;}if(line)c.fillText(line,x,y);}
 let uploadedPhotoUrl='';
-let photoTextPosition={x:50,y:78};
+const photoPositions={business:{x:50,y:12},headline:{x:50,y:48},foot:{x:50,y:78},info:{x:50,y:91}};
 const uploadedPreview=document.getElementById('uploadedPreview');
-const uploadedOverlay=document.getElementById('uploadedOverlay');
+const photoFontMap={modern:'Arial, Helvetica, sans-serif',elegant:'Georgia, serif',classic:'Times New Roman, serif',fun:'Trebuchet MS, sans-serif',hand:'Comic Sans MS, cursive',bold:'Impact, Haettenschweiler, sans-serif'};
+const photoLayers={business:'photoBusinessOverlay',headline:'photoHeadlineOverlay',foot:'photoFootOverlay',info:'photoInfoOverlay'};
+function photoInfoText(){const op=document.getElementById('photoOpeningTime').value,cl=document.getElementById('photoClosingTime').value,days=document.getElementById('photoOpeningDays').value.trim(),phone=document.getElementById('photoPhone').value.trim(),label=document.getElementById('photoPhoneLabel').value.trim();const hours=(op||cl)?'Horario: '+(op||'')+(op&&cl?'–':'')+(cl||''):'';return [hours,days,phone?[label,phone].filter(Boolean).join(': '):''].filter(Boolean).join('\n');}
+function fitPhotoPreviewText(el,requestedSize){
+ const box=uploadedPreview.getBoundingClientRect();
+ if(!box.width||!box.height)return;
+ const styles=getComputedStyle(el),fontFamily=styles.fontFamily,fontWeight=styles.fontWeight;
+ const maxW=box.width*.88,maxH=box.height*(el.id==='photoInfoOverlay'?.18:.22);
+ const canvas=fitPhotoPreviewText.canvas||(fitPhotoPreviewText.canvas=document.createElement('canvas'));
+ const ctx=canvas.getContext('2d');
+ const raw=(el.textContent||'').split('\n');
+ let size=Math.max(8,Number(requestedSize)||16),lines=[];
+ function layout(){
+  ctx.font=fontWeight+' '+size+'px '+fontFamily;lines=[];
+  raw.forEach(paragraph=>{
+   const words=paragraph.split(/\s+/).filter(Boolean);let line='';
+   words.forEach(word=>{
+    let candidate=line?line+' '+word:word;
+    if(ctx.measureText(candidate).width<=maxW){line=candidate;return;}
+    if(line){lines.push(line);line='';}
+    if(ctx.measureText(word).width<=maxW){line=word;return;}
+    let part='';for(const ch of Array.from(word)){
+     const test=part+ch;
+     if(part&&ctx.measureText(test).width>maxW){lines.push(part);part=ch;}else part=test;
+    }
+    line=part;
+   });
+   if(line)lines.push(line);
+   if(!words.length)lines.push('');
+  });
+ }
+ layout();
+ const lineHeight=size*1.08;
+ while(size>8&&lines.length*size*1.08>maxH){size--;layout();}
+ el.style.boxSizing='border-box';el.style.width='88%';el.style.maxWidth='88%';el.style.maxHeight=maxH+'px';
+ el.style.fontSize=size+'px';el.style.lineHeight='1.08';el.style.whiteSpace='pre-wrap';
+ el.style.overflowWrap='anywhere';el.style.wordBreak='break-word';el.style.overflow='hidden';
+ // Rebuild wrapped lines explicitly: this also handles very long words and decorative fonts.
+ el.textContent=lines.join('\n');
+}
 function updatePhotoTextStyle(){
- const size=Number(document.getElementById('photoFontSize').value)||32;
- const color=document.getElementById('photoTextColor').value||'#ffffff';
- const bg=document.getElementById('photoTextBg').value||'#000000';
- uploadedOverlay.style.left=photoTextPosition.x+'%';uploadedOverlay.style.top=photoTextPosition.y+'%';
- uploadedOverlay.style.fontSize='clamp(16px, '+(size/4)+'vw, '+size+'px)';
- uploadedOverlay.style.color=color;uploadedOverlay.style.background=document.getElementById('photoNoBg').checked?'transparent':hexToRgba(bg,.38);const outlineOn=document.getElementById('photoOutlineEnabled').checked;const ow=Number(document.getElementById('photoOutlineWidth').value)||0;const oc=document.getElementById('photoOutlineColor').value||'#000000';uploadedOverlay.style.webkitTextStroke=outlineOn&&ow>0?(ow+'px '+oc):'0 transparent';uploadedOverlay.style.borderRadius=document.getElementById('photoNoBg').checked?'0':'10px';uploadedOverlay.style.border='0';
+ const color=document.getElementById('photoTextColor').value||'#ffffff',bg=document.getElementById('photoTextBg').value||'#000000',noBg=document.getElementById('photoNoBg').checked,outline=document.getElementById('photoOutlineEnabled').checked,ow=Number(document.getElementById('photoOutlineWidth').value)||0,oc=document.getElementById('photoOutlineColor').value||'#000000';
+ const cfg={business:['photoBusiness','photoBusinessSize','photoBusinessFont',photoPositions.business],headline:['photoHeadline','photoHeadlineSize','photoHeadlineFont',photoPositions.headline],foot:['photoFoot','photoFootSize','photoFootFont',photoPositions.foot]};
+ Object.entries(cfg).forEach(([key,[textId,sizeId,fontId,pos]])=>{const el=document.getElementById(photoLayers[key]);el.textContent=document.getElementById(textId).value;el.style.left=pos.x+'%';el.style.top=pos.y+'%';el.style.fontSize=Math.max(8,Number(document.getElementById(sizeId).value))+'px';el.style.fontFamily=photoFontMap[document.getElementById(fontId).value]||photoFontMap.modern;el.style.fontWeight=document.getElementById(fontId).value==='bold'?'900':'700';el.style.color=color;el.style.background=noBg?'transparent':hexToRgba(bg,.38);el.style.webkitTextStroke=outline&&ow>0?(ow+'px '+oc):'0 transparent';el.style.borderRadius=noBg?'0':'10px';fitPhotoPreviewText(el,document.getElementById(sizeId).value);});
+ const info=document.getElementById(photoLayers.info);info.textContent=photoInfoText();info.style.left=photoPositions.info.x+'%';info.style.top=photoPositions.info.y+'%';info.style.fontSize='14px';info.style.width='88%';info.style.maxWidth='88%';info.style.maxHeight='18%';info.style.fontFamily=photoFontMap.modern;info.style.fontWeight='700';info.style.color=color;info.style.background=noBg?'transparent':hexToRgba(bg,.38);info.style.webkitTextStroke=outline&&ow>0?(ow+'px '+oc):'0 transparent';fitPhotoPreviewText(info,14);
 }
 function hexToRgba(hex,alpha){const h=(hex||'#000000').replace('#','');const n=parseInt(h.length===3?h.split('').map(x=>x+x).join(''):h,16);if(!Number.isFinite(n))return `rgba(0,0,0,${alpha})`;return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${alpha})`;}
-document.getElementById('photoFile').addEventListener('change',function(){
- const file=this.files&&this.files[0];if(!file)return;
- if(!file.type.startsWith('image/')){alert('Elige un archivo de imagen.');return;}
- if(uploadedPhotoUrl)URL.revokeObjectURL(uploadedPhotoUrl);
- uploadedPhotoUrl=URL.createObjectURL(file);
- const img=document.getElementById('uploadedImage');img.onload=()=>{uploadedPreview.hidden=false;applyPhotoChanges();};img.src=uploadedPhotoUrl;
-});
-document.getElementById('photoText').addEventListener('input',()=>{uploadedOverlay.textContent=document.getElementById('photoText').value;});
-['photoFontSize','photoTextColor','photoTextBg','photoNoBg','photoOutlineEnabled','photoOutlineColor','photoOutlineWidth'].forEach(id=>document.getElementById(id).addEventListener('input',updatePhotoTextStyle));['photoNoBg','photoOutlineEnabled'].forEach(id=>document.getElementById(id).addEventListener('change',updatePhotoTextStyle));
-let draggingPhotoText=false;
-uploadedOverlay.addEventListener('pointerdown',e=>{draggingPhotoText=true;uploadedOverlay.setPointerCapture(e.pointerId);e.preventDefault();});
-uploadedOverlay.addEventListener('pointermove',e=>{if(!draggingPhotoText)return;const r=uploadedPreview.getBoundingClientRect();if(!r.width||!r.height)return;photoTextPosition.x=Math.max(8,Math.min(92,((e.clientX-r.left)/r.width)*100));photoTextPosition.y=Math.max(6,Math.min(94,((e.clientY-r.top)/r.height)*100));updatePhotoTextStyle();});
-function stopPhotoTextDrag(){draggingPhotoText=false;}
-uploadedOverlay.addEventListener('pointerup',stopPhotoTextDrag);uploadedOverlay.addEventListener('pointercancel',stopPhotoTextDrag);
-function applyPhotoChanges(){
- const img=document.getElementById('uploadedImage');if(!uploadedPhotoUrl||!img.naturalWidth){alert('Elige primero una foto del teléfono.');return;}
- const filters={none:'none',warm:'sepia(.22) saturate(1.15)',bright:'brightness(1.12) saturate(1.08)',mono:'grayscale(1)',vivid:'saturate(1.5) contrast(1.08)'};
- img.style.filter=filters[document.getElementById('photoFilter').value]||'none';
- uploadedOverlay.textContent=document.getElementById('photoText').value;updatePhotoTextStyle();
+document.getElementById('photoFile').addEventListener('change',function(){const file=this.files&&this.files[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Elige un archivo de imagen.');return;}if(uploadedPhotoUrl.startsWith('blob:'))URL.revokeObjectURL(uploadedPhotoUrl);uploadedPhotoUrl=URL.createObjectURL(file);const img=document.getElementById('uploadedImage');img.onload=()=>{uploadedPreview.hidden=false;applyPhotoChanges();};img.src=uploadedPhotoUrl;});
+['photoBusiness','photoBusinessSize','photoBusinessFont','photoHeadline','photoHeadlineSize','photoHeadlineFont','photoFoot','photoFootSize','photoFootFont','photoOpeningTime','photoClosingTime','photoOpeningDays','photoPhone','photoPhoneLabel','photoTextColor','photoTextBg','photoNoBg','photoOutlineEnabled','photoOutlineColor','photoOutlineWidth'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',updatePhotoTextStyle);el.addEventListener('change',updatePhotoTextStyle);});
+let draggingPhotoLayer=null;
+Object.entries(photoLayers).forEach(([key,id])=>{const el=document.getElementById(id);el.addEventListener('pointerdown',e=>{draggingPhotoLayer=key;el.setPointerCapture(e.pointerId);e.preventDefault();});el.addEventListener('pointermove',e=>{if(draggingPhotoLayer!==key)return;const r=uploadedPreview.getBoundingClientRect();if(!r.width||!r.height)return;photoPositions[key]={x:Math.max(5,Math.min(95,(e.clientX-r.left)/r.width*100)),y:Math.max(3,Math.min(97,(e.clientY-r.top)/r.height*100))};updatePhotoTextStyle();});const stop=()=>{if(draggingPhotoLayer===key)draggingPhotoLayer=null;};el.addEventListener('pointerup',stop);el.addEventListener('pointercancel',stop);});
+function applyPhotoChanges(){const img=document.getElementById('uploadedImage');if(!uploadedPhotoUrl||!img.naturalWidth){alert('Elige primero una foto del teléfono.');return;}const filters={none:'none',warm:'sepia(.22) saturate(1.15)',bright:'brightness(1.12) saturate(1.08)',mono:'grayscale(1)',vivid:'saturate(1.5) contrast(1.08)'};img.style.filter=filters[document.getElementById('photoFilter').value]||'none';updatePhotoTextStyle();}
+const photoFieldIds=['photoBusiness','photoBusinessSize','photoBusinessFont','photoHeadline','photoHeadlineSize','photoHeadlineFont','photoFoot','photoFootSize','photoFootFont','photoOpeningTime','photoClosingTime','photoOpeningDays','photoPhone','photoPhoneLabel','photoTextColor','photoTextBg','photoNoBg','photoOutlineEnabled','photoOutlineColor','photoOutlineWidth','photoFilter'];
+async function savePhotoDesign(){const img=document.getElementById('uploadedImage');if(!uploadedPhotoUrl||!img.naturalWidth){alert('Primero elige una foto del teléfono.');return;}const name=prompt('Pon un nombre para reconocer este diseño:','Mi diseño con foto');if(!name||!name.trim())return;try{let photoData=uploadedPhotoUrl;if(!photoData.startsWith('data:')){const response=await fetch(photoData);const blob=await response.blob();photoData=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(blob);});}const values={};photoFieldIds.forEach(id=>{const el=document.getElementById(id);values[id]=el.type==='checkbox'?el.checked:el.value;});values.photoPositions=photoPositions;const saved=JSON.parse(localStorage.getItem('mnp_saved_designs')||'[]');saved.push({type:'photo',name:name.trim(),business,values,photoData});localStorage.setItem('mnp_saved_designs',JSON.stringify(saved));renderTemplates();renderSavedDesigns();alert('Diseño con fotografía guardado en este móvil. Lo encontrarás en «Mis diseños propios».');}catch(e){alert('No se ha podido guardar. La fotografía puede ser demasiado grande o el móvil puede no tener espacio. Prueba con una imagen más pequeña.');}}
+function drawPhotoText(c,text,x,y,size,font,weight,color,outlineOn,outlineWidth,outlineColor,noBg,bgColor){
+ if(!text||!text.trim())return;
+ const scale=2.15,pad=18,maxWidth=1080-pad*2;
+ let fitted=Math.max(8,Number(size)||16),lines=[];
+ function makeLines(){
+  c.font=weight+' '+Math.round(fitted*scale)+'px '+(photoFontMap[font]||photoFontMap.modern);lines=[];
+  String(text).split('\n').forEach(paragraph=>{
+   const words=paragraph.split(/\s+/).filter(Boolean);let line='';
+   words.forEach(word=>{
+    const candidate=line?line+' '+word:word;
+    if(c.measureText(candidate).width<=maxWidth){line=candidate;return;}
+    if(line){lines.push(line);line='';}
+    if(c.measureText(word).width<=maxWidth){line=word;return;}
+    let part='';for(const ch of Array.from(word)){
+     const test=part+ch;
+     if(part&&c.measureText(test).width>maxWidth){lines.push(part);part=ch;}else part=test;
+    }
+    line=part;
+   });
+   if(line)lines.push(line);
+  });
+ }
+ makeLines();
+ while(fitted>8&&lines.length*fitted*scale*1.15>390){fitted--;makeLines();}
+ const lineHeight=Math.round(fitted*scale*1.15),total=lines.length*lineHeight;
+ const widest=Math.min(maxWidth,Math.max(40,...lines.map(t=>c.measureText(t).width))+pad*2);
+ const safeX=Math.max(widest/2+pad,Math.min(1080-widest/2-pad,x));
+ const safeY=Math.max(pad+total/2,Math.min(1350-pad-total/2,y));
+ if(!noBg){c.fillStyle=hexToRgba(bgColor,.38);c.fillRect(Math.max(pad,safeX-widest/2),Math.max(pad,safeY-total/2-pad),widest,Math.min(1350-pad*2,total+pad*2));}
+ c.fillStyle=color;c.strokeStyle=outlineColor;c.lineJoin='round';c.lineWidth=outlineWidth*scale;
+ c.textAlign='center';c.textBaseline='middle';
+ lines.forEach((ln,i)=>{const yy=safeY-total/2+lineHeight*(i+.5);if(outlineOn&&outlineWidth>0)c.strokeText(ln,safeX,yy,maxWidth);c.fillText(ln,safeX,yy,maxWidth);});
 }
-async function savePhotoDesign(){
- const img=document.getElementById('uploadedImage');if(!uploadedPhotoUrl||!img.naturalWidth){alert('Primero elige una foto del teléfono.');return;}
- const name=prompt('Pon un nombre para reconocer este diseño:','Mi diseño con foto');if(!name||!name.trim())return;
- try{
-  let photoData=uploadedPhotoUrl;
-  if(!photoData.startsWith('data:')){const response=await fetch(photoData);const blob=await response.blob();photoData=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(blob);});}
-  const ids=['photoText','photoFontSize','photoTextColor','photoTextBg','photoNoBg','photoOutlineEnabled','photoOutlineColor','photoOutlineWidth','photoFilter'];const values={};ids.forEach(id=>{const el=document.getElementById(id);values[id]=el.type==='checkbox'?el.checked:el.value;});values.photoX=photoTextPosition.x;values.photoY=photoTextPosition.y;
-  const saved=JSON.parse(localStorage.getItem('mnp_saved_designs')||'[]');saved.push({type:'photo',name:name.trim(),business,values,photoData});localStorage.setItem('mnp_saved_designs',JSON.stringify(saved));renderTemplates();renderSavedDesigns();alert('Diseño con fotografía guardado en este móvil. Lo encontrarás en «Mis diseños propios».');
- }catch(e){alert('No se ha podido guardar. La fotografía puede ser demasiado grande o el móvil puede no tener espacio. Prueba con una imagen más pequeña.');}
-}
-
-function downloadPhotoPoster(){
- const img=document.getElementById('uploadedImage');if(!uploadedPhotoUrl||!img.naturalWidth){alert('Elige primero una foto del teléfono.');return;}
- const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const c=canvas.getContext('2d');
- const iw=img.naturalWidth,ih=img.naturalHeight;const scale=Math.max(1080/iw,1350/ih),dw=iw*scale,dh=ih*scale;c.filter=img.style.filter||'none';c.drawImage(img,(1080-dw)/2,(1350-dh)/2,dw,dh);c.filter='none';
- const x=photoTextPosition.x/100*1080,y=photoTextPosition.y/100*1350;const size=Number(document.getElementById('photoFontSize').value)||32;
- const text=document.getElementById('photoText').value||'¡Descubre nuestra oferta!';c.font='900 '+Math.round(size*2.15)+'px system-ui';c.textAlign='center';c.textBaseline='middle';
- const maxWidth=960,lineHeight=Math.round(size*2.55),words=text.split(/\s+/);let lines=[],line='';for(const word of words){const test=line?line+' '+word:word;if(c.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);
- const totalHeight=lines.length*lineHeight,pad=20;if(!document.getElementById('photoNoBg').checked){c.fillStyle=hexToRgba(document.getElementById('photoTextBg').value,.38);c.fillRect(Math.max(0,x-500),Math.max(0,y-totalHeight/2-pad),Math.min(1080,1000),Math.min(1350,totalHeight+pad*2));}
- c.textAlign='center';c.fillStyle=document.getElementById('photoTextColor').value;const outlineOn=document.getElementById('photoOutlineEnabled').checked;const ow=(Number(document.getElementById('photoOutlineWidth').value)||0)*2.15;c.lineJoin='round';c.strokeStyle=document.getElementById('photoOutlineColor').value;if(outlineOn&&ow>0)c.lineWidth=ow;c.shadowColor='transparent';c.shadowBlur=0;lines.forEach((ln,i)=>{const yy=y-totalHeight/2+lineHeight*(i+.5);if(outlineOn&&ow>0)c.strokeText(ln,x,yy,maxWidth);c.fillText(ln,x,yy,maxWidth);});
- saveCanvasAndDownload(canvas,'mi-negocio-publica-foto.png');
-}
+function downloadPhotoPoster(){const img=document.getElementById('uploadedImage');if(!uploadedPhotoUrl||!img.naturalWidth){alert('Elige primero una foto del teléfono.');return;}const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const c=canvas.getContext('2d');const iw=img.naturalWidth,ih=img.naturalHeight,scale=Math.max(1080/iw,1350/ih),dw=iw*scale,dh=ih*scale;c.filter=img.style.filter||'none';c.drawImage(img,(1080-dw)/2,(1350-dh)/2,dw,dh);c.filter='none';const color=document.getElementById('photoTextColor').value,bg=document.getElementById('photoTextBg').value,noBg=document.getElementById('photoNoBg').checked,outline=document.getElementById('photoOutlineEnabled').checked,ow=Number(document.getElementById('photoOutlineWidth').value)||0,oc=document.getElementById('photoOutlineColor').value;const defs=[['business','photoBusiness','photoBusinessSize','photoBusinessFont',900],['headline','photoHeadline','photoHeadlineSize','photoHeadlineFont',900],['foot','photoFoot','photoFootSize','photoFootFont',750]];defs.forEach(([key,textId,sizeId,fontId,weight])=>{const pos=photoPositions[key];drawPhotoText(c,document.getElementById(textId).value,pos.x/100*1080,pos.y/100*1350,Number(document.getElementById(sizeId).value),document.getElementById(fontId).value,weight,color,outline,ow,oc,noBg,bg);});const info=photoInfoText();if(info)drawPhotoText(c,info,photoPositions.info.x/100*1080,photoPositions.info.y/100*1350,15,'modern',700,color,outline,ow,oc,noBg,bg);saveCanvasAndDownload(canvas,'mi-negocio-publica-foto.png');}
 
 async function shareOrExplain(network){
  const msg=document.getElementById('shareMessage');
